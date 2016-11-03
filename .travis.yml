@@ -4,64 +4,55 @@ php:
   - 5.3
   - 5.4
   - 5.5
-  - 5.6
-  - hhvm
 
 matrix:
-  fast_finish: true
-  allow_failures:
-    - php:
-      - 5.3
-      - 5.4
-      - 5.5
-      - 5.6
-      - hhvm
+  allow-failures:
+    - php: 5.5
+
+  env:
+    global:
+      - ES_VER=1.0.1
+      - ES_MAPPER_ATTACHMENTS_VER=2.0.0.RC1
+      - ES_TRANSPORT_THRIFT_VER=2.0.0.RC1
+      - ES_GEOCLUSTER_FACET_VER=0.0.10
+      - ES_WAIT_ON_MAPPING_CHANGE=true
+      - DATABASE='drupal'
+      - DB_USERNAME='root'
+      - DB_ENCODE='utf8'
+      - MODULE_PATH='build/sites/all/modules'
+      - ES_REQUIRE='no-dev'
+    matrix:
+      - DRUPAL_3RD_PARTY='composer_manager'
+      - DRUPAL_3RD_PARTY='libraries'
 
 mysql:
-  database: travis_ci_drupal_module_example_test
-  username: root
-  encoding: utf8
+  database: $DATABASE
+  username: $DB_USERNAME
+  encoding: $DB_ENCODE
 
 before_install:
-  - sudo apt-get update > /dev/null
+  - composer self-update
+  - pear channel-discover pear.drush.org
 
 install:
-  # install php packages required for running a web server from drush on php 5.3
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
-
-  # add composer's global bin directory to the path
-  # see: https://github.com/drush-ops/drush#install---composer
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-  # install drush globally
-  - composer global require drush/drush:dev-master
+  - pear install drush/drush
+  - phpenv rehash
+  - ./tests/bin/run_elasticsearch.sh
 
 before_script:
-  # remove Xdebug as we don't need it and it causes
-  # PHP Fatal error:  Maximum function nesting level of '256' reached
-  - phpenv config-rm xdebug.ini
+  - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - drush --yes make tests/includes/search_api_elasticsearch.make build
+  - mkdir -p $MODULE_PATH
+  - git archive $(git rev-parse --abbrev-ref HEAD) | tar -x -C $MODULE_PATH
+  - cd build
+  - drush --yes site-install minimal --db-url="mysql://$DB_USERNAME@127.0.0.1/$DATABASE"
+  - drush --yes dis search
+  - drush --yes en $DRUPAL_3RD_PARTY
+  - drush --yes en search_api_elasticsearch
+  - drush --yes en simpletest
 
-  # navigate out of module directory to prevent blown stack by recursive module lookup
-  - cd ../..
+script:
+  - drush test-run 'Search API Elasticsearch' --debug
 
-  # download Drupal 8 core.
-  - wget -q -O - http://ftp.drupal.org/files/projects/drupal-8.0.x-dev.tar.gz | tar xz
-  - cd drupal-8.0.x-dev
-
-  # apply patch so that run-tests.sh returns error code when executing Simpletests.
-  - wget -q -O - https://www.drupal.org/files/issues/run_tests_sh_should-2189345-53.patch | patch -p1
-
-  # create new site, stubbing sendmail path with true to prevent delivery errors and manually resolving drush path
-  - mysql -e 'create database travis_ci_drupal_module_example_test'
-  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/travis_ci_drupal_module_example_test --enable=simpletest travis_ci_drupal_module_example_test
-
-  # reference and enable travis_ci_drupal_module_example in build site
-  - ln -s $(readlink -e $(cd -)) travis_ci_drupal_module_example_test/drupal/sites/all/modules/travis_ci_drupal_module_example
-  - cd travis_ci_drupal_module_example_test/drupal
-  - drush --yes pm-enable travis_ci_drupal_module_example
-
-  # start a web server on port 8080, run in the background; wait for initialization
-  - drush runserver 127.0.0.1:8080 &
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
-
-script: drush test-run 'Travis-CI Drupal Module Example' --uri=http://127.0.0.1:8080
+notifications:
+  irc: irc.freenode.org#vmdoh
