@@ -17,7 +17,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install curl php5 -y
   - sudo apt-get install curl php5-cli php5-curl git -y
-  - sudo apt-get install php-pear
 
 install:
   - npm install gulp -g
@@ -31,8 +30,7 @@ script:
   - sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
   - sudo composer
 
-  - pear channel-discover pear.drush.org
-  - pear install drush/drush
+  - sudo composer global require drush/drush:8.*
   - drush version
 
   # Default gulp is configured to run coder, csslint and eslint.
