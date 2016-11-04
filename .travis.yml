@@ -35,7 +35,7 @@ script:
 
   - ssh-keygen -t rsa -N '' -f id_rsa
   - ls
-  - ssh-copy-id -i id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com -oStrictHostKeyChecking=no
+  - ssh-copy-id -i id_rsa.pub -o StrictHostKeyChecking=no d7srijan.dev@free-6101.devcloud.hosting.acquia.com
   #- /usr/bin/keychain $HOME/.ssh/id_rsa
   #- source $HOME/.keychain/$HOSTNAME-sh
 
