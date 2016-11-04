@@ -24,7 +24,8 @@ install:
 script:
   - sudo curl -LsS http://codeception.com/codecept.phar -o /usr/local/bin/codecept
   - sudo chmod a+x /usr/local/bin/codecept\
-  - php --version
+  #- php --version
+  scripts/php-version.sh
 
   - sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
   - sudo composer
@@ -35,7 +36,7 @@ script:
 
   - ssh-keygen -t rsa -N '' -f id_rsa
   - ls
-  - yes | ssh-copy-id -i id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
+  #- ssh-copy-id -i id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
   #- /usr/bin/keychain $HOME/.ssh/id_rsa
   #- source $HOME/.keychain/$HOSTNAME-sh
 
