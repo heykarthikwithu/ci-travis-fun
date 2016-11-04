@@ -15,8 +15,7 @@ matrix:
 before_install:
   - sudo add-apt-repository ppa:ondrej/php5-5.6 -y
   - sudo apt-get update
-  - sudo apt-get install curl php5 -y
-  - sudo apt-get install curl php5-cli php5-curl git -y
+  - sudo apt-get install curl php5 php5-cli php5-curl git -y
 
 install:
   - npm install gulp -g
@@ -34,7 +33,7 @@ script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - drush version
 
-  - ssh-keygen -f id_rsa -t rsa -b 2048
+  - ssh-keygen -t rsa -N '' -f id_rsa
   - ssh-copy-id -i ~/.ssh/id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
   - /usr/bin/keychain $HOME/.ssh/id_rsa
   - source $HOME/.keychain/$HOSTNAME-sh
