@@ -34,7 +34,7 @@ script:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - drush version
 
-  - ssh-keygen -f id_rsa
+  - ssh-keygen -f id_rsa -t rsa -b 2048
   - ssh-copy-id -i ~/.ssh/id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
   - /usr/bin/keychain $HOME/.ssh/id_rsa
   - source $HOME/.keychain/$HOSTNAME-sh
