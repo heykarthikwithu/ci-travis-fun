@@ -22,17 +22,20 @@ install:
   - npm install
 
 script:
-  - sudo curl -LsS http://codeception.com/codecept.phar -o /usr/local/bin/codecept
-  - sudo chmod a+x /usr/local/bin/codecept\
+  #- sudo curl -LsS http://codeception.com/codecept.phar -o /usr/local/bin/codecept
+  #- sudo chmod a+x /usr/local/bin/codecept\
+  - sh scripts/install-codecept.sh
   #- php --version
   - sh scripts/php-version.sh
 
-  - sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
-  - sudo composer
+  #- sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+  #- sudo composer
+  - sh scripts/install-composer.sh
 
-  - sudo composer global require drush/drush:8.*
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - drush version
+  #- sudo composer global require drush/drush:8.*
+  #- export PATH="$HOME/.composer/vendor/bin:$PATH"
+  #- drush version
+  - sh scripts/install-drush.sh
 
   - ssh-keygen -t rsa -N '' -f id_rsa
   - ls
