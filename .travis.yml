@@ -37,10 +37,10 @@ script:
   #- drush version
   - sh scripts/install-drush.sh
 
-  - ssh-keygen -t rsa -N '' -f id_rsa
-  - ls
+  #- ssh-keygen -t rsa -N '' -f id_rsa
+  #- ls
   #- ssh-copy-id -i id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
-  - sh scripts/ssh-authenticate.sh -i id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
+  - sh scripts/ssh-authenticate.sh
   #- /usr/bin/keychain $HOME/.ssh/id_rsa
   #- source $HOME/.keychain/$HOSTNAME-sh
 
