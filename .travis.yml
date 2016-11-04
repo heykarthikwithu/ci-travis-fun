@@ -24,8 +24,9 @@ install:
 
 script:
   - sudo curl -LsS http://codeception.com/codecept.phar -o /usr/local/bin/codecept
-  - sudo chmod a+x /usr/local/bin/codecept
-  - php -r "readfile('http://files.drush.org/drush.phar');" > drush && chmod +x drush && mv drush /usr/bin/
+  - sudo chmod a+x /usr/local/bin/codecept\
+  - php --version
+  #- php -r "readfile('http://files.drush.org/drush.phar');" > drush && chmod +x drush && mv drush /usr/bin/
 
   # Default gulp is configured to run coder, csslint and eslint.
   - gulp
