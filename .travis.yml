@@ -31,6 +31,7 @@ script:
   - sudo composer
 
   - sudo composer global require drush/drush:8.*
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - drush version
 
   # Default gulp is configured to run coder, csslint and eslint.
