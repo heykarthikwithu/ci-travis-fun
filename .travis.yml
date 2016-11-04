@@ -1,50 +1,7 @@
----
-# More information about configuring your Travis build using this .travis.yml
-# file can be found here: http://docs.travis-ci.com/user/build-configuration/
+language: php
 
-language: python
-python: "2.7"
+php:
+  - 5.4
+  - 5.5
 
-before_install:
-  # Make sure we have the latest versions of all our packages.
-  - sudo apt-get update -qq
-
-install:
-  # Install and configure Ansible (used to easily configure our environment).
-  - pip install ansible
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
-  - ansible-galaxy install -r requirements.txt --ignore-errors
-
-before_script:
-  # Configure our environment using Ansible.
-  #- "ansible-playbook -i tests/inventory tests/setup.yml --connection=local --sudo"
-
-  # Debugging.
-  - php --version
-  - php --ini
-  - php -m
-  - apache2 -v
-
-  # Test environment setup.
-  #- sudo chown -R travis:travis /var/www/drupal
-  #- cd /var/www/drupal
-  #- drush --uri=http://drupaltest.dev/ dl -y honeypot
-  #- drush --uri=http://drupaltest.dev/ en -y honeypot simpletest path
-
-script:
-  # Make sure home page loads.
-  # - curl --head http://drupaltest.dev/
-
-  # - cd /var/www/drupal/core
-
-  # Run SimpleTests on a core module.
-  # - php scripts/run-tests.sh --url http://drupaltest.dev/ Path
-
-  # Run SimpleTests on a contrib module.
-  # - php scripts/run-tests.sh --url http://drupaltest.dev/ honeypot
-
-  # Run core PHPUnit tests.
-  # - ./vendor/phpunit/phpunit/phpunit
-  # - ./vendor/phpunit/phpunit/phpunit --coverage-text
-
-  # TODO: More testing...
+script: build.sh
