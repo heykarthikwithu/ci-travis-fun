@@ -5,3 +5,4 @@ php:
 
 script:
   - curl --head https://dev.oncorps.io
+  - ssh d7srijan.dev@free-6101.devcloud.hosting.acquia.com
