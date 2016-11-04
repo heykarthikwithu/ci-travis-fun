@@ -21,7 +21,6 @@ before_install:
 install:
   - npm install gulp -g
   - npm install
-  - composer install
 
 script:
   - curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
