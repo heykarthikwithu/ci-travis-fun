@@ -34,9 +34,11 @@ script:
   - drush version
 
   - ssh-keygen -t rsa -N '' -f id_rsa
-  - ssh-copy-id -i ~/.ssh/id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
-  - /usr/bin/keychain $HOME/.ssh/id_rsa
-  - source $HOME/.keychain/$HOSTNAME-sh
+  - cd ~/.ssh
+  - ls
+  #- ssh-copy-id -i ~/.ssh/id_rsa.pub d7srijan.dev@free-6101.devcloud.hosting.acquia.com
+  #- /usr/bin/keychain $HOME/.ssh/id_rsa
+  #- source $HOME/.keychain/$HOSTNAME-sh
 
 
   # Default gulp is configured to run coder, csslint and eslint.
